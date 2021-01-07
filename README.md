@@ -98,5 +98,38 @@ Correr `ng serve` para ejecutarlo en modo desarrollador. Entrar desde el navegad
     }
   ]
 ```
-## Servidor en modo desarrollo
-
+## Las cotizaciones de ejemplo son
+```javascript
+[
+  {
+    internalCurrency: 'USD',
+    referenceCurrency: 'UYU',
+    quote: 42.50
+  },
+  {
+    internalCurrency: 'EUR',
+    referenceCurrency: 'UYU',
+    quote: 55
+  },
+  {
+    internalCurrency: 'UYU',
+    referenceCurrency: 'USD',
+    quote: 0.0236228
+  },
+  {
+    internalCurrency: 'EUR',
+    referenceCurrency: 'USD',
+    quote: 1.2299
+  },
+  {
+    internalCurrency: 'UYU',
+    referenceCurrency: 'EUR',
+    quote: 0.0136228
+  },
+  {
+    internalCurrency: 'USD',
+    referenceCurrency: 'EUR',
+    quote: 0.8299
+  }
+]
+```
