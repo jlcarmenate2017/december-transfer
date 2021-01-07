@@ -1,0 +1,240 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Transferencia</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-vertical-stepper [linear]="true" #stepper (selectionChange)="setIndex($event)" (click)="triggerClick()">
+      <mat-step [stepControl]="transferForm" label="Datos de entrada">
+
+        <mat-card>
+          <mat-card-content>
+            <form [formGroup]="transferForm">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <mat-select placeholder="Seleccione el numero de cuenta"
+                              [(ngModel)]="accountOrig"
+                              [required]="true"
+                              (ngModelChange)="createConversion()"
+                              [ngModelOptions]="{standalone: true}"
+                              name="account">
+                    <mat-option *ngFor="let item of listAccount"
+                                [value]="item">
+                      {{item.currency}} - {{item.accountNumber}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput
+                         placeholder="Ingrese la cuenta de destino" formControlName="numberAccountDest" required>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('required')">
+                    La Cuenta de destino es requerida
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('regexValidation')">
+                    La Cuenta debe contener solo números
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('accountNotExist')">
+                    Este número de cuenta no existe para ningun cliente
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <input matInput
+                         placeholder="Ingrese el monto a transferir" formControlName="amount" required>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('required')">
+                    El monto a transferir es requerido
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('regexValidation')">
+                    El monto a transferir debe ser un numero
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('amountToLong')">
+                    El monto a transferir no debe ser mayor al saldo de la cuenta
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="amountChange"
+                         placeholder="Monto a transferir (Cambio)" >
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="quotation"
+                         placeholder="Cotización" >
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="currencyQuotation"
+                         placeholder="Moneda para la cotización" >
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+              <textarea matInput formControlName="observations"
+                        placeholder="Referencia o comentario..."></textarea>
+                  <mat-error *ngIf="transferForm.get('observations').hasError('maxlength')">
+                    Este número de cuenta no existe para ningun cliente
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </form>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+              <button color="primary" mat-raised-button fxFlex matStepperNext [disabled]="transferForm.invalid">Siguiente</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-step>
+      <mat-step [stepControl]="confirmForm" label="Confirmación">
+        <mat-card>
+          <mat-card-content>
+            <form [formGroup]="confirmForm">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <mat-select placeholder="Seleccione el numero de cuenta"
+                              [(ngModel)]="accountOrig"
+                              [required]="true"
+                              [disabled]="true"
+                              (ngModelChange)="createConversion()"
+                              [ngModelOptions]="{standalone: true}"
+                              name="account">
+                    <mat-option *ngFor="let item of listAccount"
+                                [value]="item">
+                      {{item.currency}} - {{item.accountNumber}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput
+                         placeholder="Ingrese la cuenta de destino" formControlName="numberAccountDest" required>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('required')">
+                    La Cuenta de destino es requerida
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('regexValidation')">
+                    La Cuenta debe contener solo números
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('numberAccountDest').hasError('accountNotExist')">
+                    Este número de cuenta no existe para ningun cliente
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <input matInput
+                         placeholder="Ingrese el monto a transferir" formControlName="amount" required>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('required')">
+                    El monto a transferir es requerido
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('regexValidation')">
+                    El monto a transferir debe ser un numero
+                  </mat-error>
+                  <mat-error *ngIf="transferForm.get('amount').hasError('amountToLong')">
+                    El monto a transferir no debe ser mayor al saldo de la cuenta
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="amountChange"
+                         placeholder="Monto a transferir (Cambio)" >
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="quotation"
+                         placeholder="Cotización" >
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input matInput formControlName="currencyQuotation"
+                         placeholder="Moneda para la cotización" >
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+              <textarea matInput formControlName="observations"
+                        placeholder="Referencia o comentario..."></textarea>
+                </mat-form-field>
+              </div>
+            </form>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+              <button mat-raised-button fxFlex matStepperPrevious>Cancelar</button>
+              <button mat-raised-button color="primary" fxFlex (click)="onConfirmTransaction()">Confirmar</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+      </mat-step>
+      <mat-step label="Comprobante">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+
+          <mat-card class="block-info" fxFlex>
+            <mat-card-header>
+              <mat-card-title>Cuenta de origen</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Cuenta:</label>
+                <label fxFlex>{{transactionModel?.accountOrig?.accountNumber}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Nombre:</label>
+                <label fxFlex>{{transactionModel?.userOrig?.firstName}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Apellido:</label>
+                <label fxFlex>{{transactionModel?.userOrig?.lastName}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Monto enviado:</label>
+                <label fxFlex>{{transactionModel?.amount}}</label>
+              </div>
+
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Cotización:</label>
+                <label fxFlex>{{transactionModel?.quotation}}</label>
+              </div>
+
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Moneda origen:</label>
+                <label fxFlex>{{transactionModel?.accountOrig?.currency}}</label>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="block-info" fxFlex>
+            <mat-card-header>
+              <mat-card-title>Cuenta de destino</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Cuenta:</label>
+                <label fxFlex>{{transactionModel?.accountDest?.accountNumber}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Nombre:</label>
+                <label fxFlex>{{transactionModel?.userDest?.firstName}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Apellido:</label>
+                <label fxFlex>{{transactionModel?.userDest?.lastName}}</label>
+              </div>
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Monto recibido:</label>
+                <label fxFlex>{{transactionModel?.amountSend}}</label>
+              </div>
+
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Cotización:</label>
+                <label fxFlex>{{transactionModel?.quotation}}</label>
+              </div>
+
+              <div fxLayout="row">
+                <label class="head-account" fxFlex>Moneda destino:</label>
+                <label fxFlex>{{transactionModel?.accountDest?.currency}}</label>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+          <button fxFlex mat-raised-button color="primary" color="primary" (click)="onTerminate()">Finalizar</button>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+  </mat-card-content>
+</mat-card>
+

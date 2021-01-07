@@ -1,0 +1,19 @@
+<div *ngIf="currentUser">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span class="menu-spacer"></span>
+      <div>
+        <a routerLink="/" mat-button><mat-icon>compare_arrows</mat-icon></a>
+        <a routerLink="/info" mat-button><mat-icon>info</mat-icon></a>
+        <button mat-icon-button (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+
